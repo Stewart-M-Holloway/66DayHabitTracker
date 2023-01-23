@@ -83,7 +83,7 @@ Alexa Response/Request Doc: https://developer.amazon.com/en-US/docs/alexa/custom
 
 Consider the following abstraction:
 
-![alt text](assets\images\alexa-skill-architecture.png)
+![alt text](assets/images/alexa-skill-architecture.png)
 
 It's very typical for a serverless microservice (AWS Lambda) to operate on the incoming request. Because lambda is stateless, it becomes necessary to define the interactions and API calls between various AWS staples like IAM, DynamoDB, S3, etc... The developer has considerable freedom to be inventive about the way they handle app behavior, although there are some best practices to ensure the user experiences a smooth verbal interactions with Alexa. There are also distinct APIs that define payloads you may send to DynamoDB/S3, etc., but the python middle layer can abstract the building of these request/response managements to speed development.
 
@@ -91,7 +91,7 @@ It's very typical for a serverless microservice (AWS Lambda) to operate on the i
 
 ### High Level Architecture View
 
-![alt text](assets\charts\high_level_architecture.png)
+![alt text](assets/charts/high_level_architecture.png)
 
 ### Utterance Model
 
@@ -99,13 +99,13 @@ When a User speaks to your skill, you essentially need two bits of information: 
 
 For most intents, we parse for a purpose (i.e. Create or Delete), and a habit (i.e. swim 10 laps.). The habit is further subdivided to allow for extra info collection, although the habit (verb) is the most important token as it will be the key through which we will access the habit.
 
-![alt text](assets\charts\utterance_diagram.png)
+![alt text](assets/charts/utterance_diagram.png)
 
 ### Persistence Layer
 
 This application uses AWS DynamoDB to store persistent information about each user, such as habits, ongoing habit streaks, visits, etc. The structure of this data store is describe in this figure:
 
-![alt text](assets\charts\persistence_model.png)
+![alt text](assets/charts/persistence_model.png)
 
 Notice that for simplicity and robustness, the key to access data about a certain habit involves _only_ the undercase and present tense form of a verb. I.e., the full habit may be "Swim 10 laps", but the key to access this will be "swim". This makes Verbal interaction with a database much more reliable.
 
@@ -127,13 +127,13 @@ To avoid repetitive encouragements from Alexa, we can actually randomly select f
 
 In addition to these, we also have "interceptors" for both saving and loading data. This is how the cache and persistent storage talk to eachother. Each time the cache data is modified, it must save that into persistent storage on the AWS DynamoDB backend to ensure that the User's interactions with their habits are recorded between sessions. These interceptors are triggered before and after each handler executes. Our lambda handling service can provide the typical RESTful API interactions with DynamoDB backend through these intercept handlers
 
-![alt text](assets\charts\cache_to_persist.png)
+![alt text](assets/charts/cache_to_persist.png)
 
 ### CREATE
 
 There is only one handler for "Create", which is "AddHabitHandler". This is achieved simply by parsing for the habit tokens, and then instantiating a key (lower case verb) within the "habits" data structure with an empty list as "streak" and the peripheral tokens within "full_habit_name".
 
-![alt text](assets\charts\add_habit.png)
+![alt text](assets/charts/add_habit.png)
 
 ### READ
 
@@ -145,7 +145,7 @@ There are 3 ways to read the user's habit and habit status:
 
 This is achieved very simply by reading habit information from persistent storage, formatting it for speech and display output, and then building the response. If we cannot find a habit for the individual check intent, we reply that "I'm not tracking a habit called {habit}, would you like to try another name?"
 
-![alt text](assets\charts\read_habit.png)
+![alt text](assets/charts/read_habit.png)
 
 ### UPDATE
 
@@ -178,7 +178,7 @@ Integration testing is the main vehicle for testing of this application and is d
 
 ### Ideal Testing Scenario (If this was professional)
 
-![alt text](assets\charts\testing_pipeline.png)
+![alt text](assets/charts/testing_pipeline.png)
 
 Typically we'd split our testing stages into an automated pipeline. Early on, we test very simple things locally i.e. baseline functionality and successful builds. Then we can promote to alpha, and perform some base-level integration testing (response/request handling/business logic). In the beta to gamma stage, we can start to load test at our anticipated prod traffic levels, to ensure decent performance. Finally, after the gamma stage, we can verify voice or visual content before we promote to prod. Even in prod, we we will continuously poll our application with a synthetic canary, so that we can find failures before customers experience them.
 

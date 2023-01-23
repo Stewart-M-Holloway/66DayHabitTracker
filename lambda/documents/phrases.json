@@ -1,0 +1,35 @@
+{
+    "0": [
+            "Start your streak strong! Let me know when you've finished by saying: Check Off a Habit for me."
+        ],
+    "first week": [
+            "This is a great start!",
+            "The first week is the hardest!",
+            "The journey of a thousand miles starts with a single step!",
+            "Way to get started!",
+            "You're doing great so far!"
+        ],
+    "mid weeks": [
+            "You're making great progress! Keep it up!",
+            "Way to go!",
+            "You're doing great!",
+            "Nothing can stop you!",
+            "One day at a time!",
+            "You're making awesome progress!",
+            "Awesome work!",
+            "I'm proud of you!",
+            "Keep it up!",
+            "Amazing job!",
+            "Wow!"
+        ],
+    "last week": 
+        [
+            "Keep going! You're almost there!",
+            "You're in the final week, just a little further!",
+            "Way to stay consistent! Just a little bit left!"
+        ],
+    "66": 
+        [
+            "Congratulations! You have successfully completed your habit 66 days in a row. This is a huge accomplishment!"
+        ]
+}
